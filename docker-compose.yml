@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  web:
+    image: php:8.2-apache
+    container_name: cyberlab-ams-web
+    ports:
+      - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=labuser
+      - DB_PASS=labpass
+      - DB_NAME=schoollab
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.11
+    container_name: cyberlab-ams-db
+    environment:
+      - MARIADB_ROOT_PASSWORD=rootpass
+      - MARIADB_DATABASE=schoollab
+      - MARIADB_USER=labuser
+      - MARIADB_PASSWORD=labpass
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db-init:/docker-entrypoint-initdb.d
+  adminer:
+    image: adminer
+    container_name: cyberlab-ams-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+volumes:
+  db_data:
