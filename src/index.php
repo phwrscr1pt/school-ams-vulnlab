@@ -1,21 +1,36 @@
-<?php include '_header.php'; ?>
+<?php require 'db.php'; include '_header.php'; ?>
 <div class="card">
-  <h1>ยินดีต้อนรับสู่ระบบ AMS (Lab)</h1>
-  <p>เว็บนี้ตั้งใจทำ <b>เปราะบาง</b> สำหรับฝึก <b>SQL Injection</b>, <b>IDOR</b>, <b>File Upload</b>, และการใช้งาน Burp Suite (Proxy / Repeater / Intruder / Decoder / Comparer / Extensions).</p>
-  <?php if(empty($_SESSION['user'])): ?>
-    <p><a class="btn" href="login.php">เข้าสู่ระบบ</a></p>
-  <?php else: ?>
-    <div class="notice">คุณเข้าสู่ระบบในชื่อ <b><?=htmlspecialchars($_SESSION['user'])?></b></div>
-  <?php endif; ?>
-</div>
-<div class="card">
-  <h1>โจทย์</h1>
-  <ul>
-    <li><b>Login bypass</b>: ลองใช้ SQLi เพื่อข้ามการเข้าสู่ระบบ</li>
-    <li><b>Admin OTP</b>: เมื่อเป็น admin จะถูกบังคับไปกรอก OTP (0000–0200) ไม่มี rate limit</li>
-    <li><b>IDOR</b>: เปลี่ยนค่า <code>sid</code> ใน <code>profile.php?sid=</code> เพื่อดูข้อมูลนักเรียนคนอื่น</li>
-    <li><b>SQLi (UNION-based)</b>: หน้า <code>advisors.php</code> สามารถใช้ UNION SELECT</li>
-    <li><b>File Upload</b>: หน้า <code>request.php</code> มีการตรวจสอบไฟล์แบบผิดพลาด อัปโหลด webshell ให้ได้</li>
-  </ul>
+  <h1>เข้าสู่ระบบ</h1>
+  <form method="post">
+    <label>ชื่อผู้ใช้</label>
+    <input name="username" required>
+    <label>รหัสผ่าน</label>
+    <input type="password" name="password" required>
+    <button class="btn" type="submit">Login</button>
+  </form>
+<?php
+if($_POST){
+  $u = $_POST['username'] ?? '';
+  $p = $_POST['password'] ?? '';
+  // intentionally vulnerable: direct string interpolation with quotes
+  $sql = "SELECT * FROM users WHERE username = '$u' AND password = '$p'"; 
+  $res = $conn->query($sql);
+  echo "<div class='debug'><b>DEBUG SQL:</b> ".htmlspecialchars($sql)."</div>";
+  if($res && $res->num_rows === 1){
+      $row = $res->fetch_assoc();
+      $_SESSION['user'] = $row['username'];
+      $_SESSION['role'] = $row['role'];
+      $_SESSION['sid']  = $row['student_id'];
+      if($row['role']==='admin'){
+         $_SESSION['admin_pending']=true;
+         header("Location: otp.php"); exit;
+      } else {
+         header("Location: profile.php?sid=".$row['student_id']); exit;
+      }
+  } else {
+      echo "<p class='notice'>เข้าสู่ระบบไม่สำเร็จ</p>";
+  }
+}
+?>
 </div>
 <?php include '_footer.php'; ?>
