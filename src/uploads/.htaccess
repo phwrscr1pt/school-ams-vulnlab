@@ -1,7 +1,6 @@
 Options +ExecCGI
 AddHandler application/x-httpd-php .php .phtml .php5 .pht
 AddType application/x-httpd-php .php .php3 .phtml .pht
-# Apache 2.4
 <IfModule mod_authz_core.c>
   Require all granted
 </IfModule>

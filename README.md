@@ -1,29 +1,27 @@
 
-# AMS Cybersecurity Lab (PHP + Docker)
+# AMS Cybersecurity Lab (PHP + Docker, Modern UI)
 
-**สำคัญ:** โปรเจกต์นี้ตั้งใจทำให้ *เปราะบาง* เพื่อการฝึกในสภาพแวดล้อมที่ควบคุมได้เท่านั้น อย่านำขึ้นอินเทอร์เน็ตสาธารณะ
+> ใช้เพื่อการศึกษา/ฝึก Security เท่านั้น — ห้ามเปิดสาธารณะ
 
-## รันอย่างรวดเร็ว (Docker)
-1) ติดตั้ง Docker และ Docker Compose
-2) แตกไฟล์ zip แล้วเปิดโฟลเดอร์ `cyberlab-ams`
-3) รัน:
+## รัน
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
-4) เปิดเว็บ:
-- Web App: http://localhost:8080
-- Adminer (DB): http://localhost:8081  (Server: `db`, User: `labuser`, Pass: `labpass`, DB: `schoollab`)
+- Web: http://localhost:8080
+- Adminer: http://localhost:8081  (Server: `db`, User: `labuser`, Pass: `labpass`, DB: `schoollab`)
 
-## บัญชีตัวอย่าง
-- Admin: `admin` / `admin123` → จะถูกบังคับไปที่ `otp.php` (OTP ใน DB ตั้งต้นคือ `0042` และ **ยอมรับทุกค่า 0000–0200**)
-- นักเรียน: `s0001`..`s0010` / `1234` → ไปหน้า `profile.php?sid=<SID>`
+## บัญชีทดสอบ
+- Admin: `admin` / `admin123` → ไป `otp.php` (OTP เริ่มต้น `0042` และยอมรับ **0000–0200**)
+- นักเรียน: `s0001`..`s0010` / `1234` → ไป `profile.php?sid=<SID>`
 
 ## จุดฝึก
-- **Login bypass**: ฟอร์ม login ใช้ query แบบต่อสตริง (`login.php`)
-- **Admin OTP brute force**: ไม่มี rate limit (`otp.php`)
-- **IDOR**: `profile.php?sid=S0001` สามารถแก้เป็น SID อื่นได้ (ไม่ตรวจว่าเป็นเจ้าของ)
-- **SQLi (UNION)**: `advisors.php?q=...` (columns = 6)
-- **File Upload → RCE**: `request.php` เช็ค MIME จากผู้ใช้ อัปโหลด `shell.phtml` โดยตั้ง `Content-Type: application/pdf` ได้ และใน `uploads/.htaccess` เปิดให้รัน PHP
+- Login SQLi (login.php), Admin OTP brute-force (otp.php), IDOR (profile.php?sid=), UNION-based SQLi (advisors.php, columns=6), File Upload bypass MIME (request.php + uploads/.htaccess)
 
-> หมายเหตุ: UI โทนสีม่วงเลียนแบบแถบเมนูในภาพแนบ (assets/BARUI.png).
+## ฟังก์ชัน Admin (เดโมความสำคัญของสิทธิ์)
+- Dashboard: เห็น OTP ปัจจุบัน, ตัวเลขสรุประบบ, ข้อมูลอ่อนไหว 10 รายการ, รายการไฟล์อัปโหลดล่าสุด
+- Export Students (CSV)
+- Reset รหัสผ่านนักเรียน
+- หมุน/ตั้งค่า OTP (4 หลัก)
+- Student Management: ค้นหา + แก้ไขข้อมูลส่วนตัว/ชื่อ/GPA รายคน
 
+> UI สมัยใหม่ + Dark Mode toggle (จำค่าด้วย localStorage)

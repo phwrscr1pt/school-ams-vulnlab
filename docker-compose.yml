@@ -1,7 +1,8 @@
+version: '3.8'
 services:
   web:
     build: .
-    container_name: cyberlab-ams-web
+    container_name: ams-web
     ports:
       - "8080:80"
     environment:
@@ -13,9 +14,10 @@ services:
       - ./src:/var/www/html
     depends_on:
       - db
+
   db:
     image: mariadb:10.11
-    container_name: cyberlab-ams-db
+    container_name: ams-db
     environment:
       - MARIADB_ROOT_PASSWORD=rootpass
       - MARIADB_DATABASE=schoollab
@@ -24,9 +26,10 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./db-init:/docker-entrypoint-initdb.d
+
   adminer:
     image: adminer
-    container_name: cyberlab-ams-adminer
+    container_name: ams-adminer
     restart: unless-stopped
     ports:
       - "8081:8080"
