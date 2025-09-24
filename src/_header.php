@@ -20,6 +20,7 @@
       <a href="advisors.php" class="<?=basename($_SERVER['PHP_SELF'])==='advisors.php'?'active':''?>">ค้นหาอาจารย์ที่ปรึกษา</a>
       <a href="request.php" class="<?=basename($_SERVER['PHP_SELF'])==='request.php'?'active':''?>">ยื่นคำร้อง</a>
       <?php if(isset($_SESSION['user'])): ?>
+        <span class="badge" style="margin-left:8px"><?=htmlspecialchars($_SESSION['user'])?></span>
         <a href="logout.php" class="btn btn-logout">ออกจากระบบ</a>
       <?php else: ?>
         <a href="login.php" class="btn btn-login">เข้าสู่ระบบ</a>

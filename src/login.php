@@ -39,5 +39,6 @@ include '_header.php';
     <button class="btn" type="submit">Login</button>
   </form>
   <div class="debug"><b>DEBUG SQL:</b> <?=htmlspecialchars($debug_sql ?: '— —')?></div>
+  <div class="hint">Demo User <b>usersname : s0001 password : 1234 </b> </div>
 </div>
 <?php include '_footer.php'; ?>
