@@ -29,7 +29,7 @@ function page_link($n){
 }
 ?>
 <div class="card">
-  <h1>ค้นหาอาจารย์ที่ปรึกษา</h1>
+  <h1>ค้นหาอาจารย์ที่ปรึกษา (ลองใส่ ผศ , ดร)</h1>
   <form method="get" class="row">
     <input name="q" placeholder="ค้นหา..." value="<?=h($q)?>">
     <button class="btn">ค้นหา</button>
