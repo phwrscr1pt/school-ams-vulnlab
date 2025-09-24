@@ -2,7 +2,7 @@
 <div class="card">
   <h1>ยื่นคำร้อง / อัปโหลดเอกสาร</h1>
   <form method="post" enctype="multipart/form-data">
-    <label>ไฟล์เอกสาร</label>
+    <label>ไฟล์เอกสาร (รองรับเฉพาะไฟล์ .png .jpg .pdf .doc)</label>
     <input type="file" name="doc" required>
     <button class="btn" type="submit">อัปโหลด</button>
   </form>
@@ -15,7 +15,7 @@ if($_FILES){
   if(in_array($ctype,$allowed)){
      $target = __DIR__.'/uploads/'.basename($orig);
      if(move_uploaded_file($f['tmp_name'],$target)){
-        echo "<p class='notice'>อัปโหลดสำเร็จ: <a target='_blank' href='uploads/".htmlspecialchars(basename($orig))."'>เปิดไฟล์</a></p>";
+        // echo "<p class='notice'>อัปโหลดสำเร็จ: <a target='_blank' href='uploads/".htmlspecialchars(basename($orig))."'>เปิดไฟล์</a></p>";
      } else { echo "<p class='notice'>อัปโหลดล้มเหลว</p>"; }
   } else { echo "<p class='notice'>ชนิดไฟล์ไม่อนุญาต ($ctype)</p>"; }
 }
