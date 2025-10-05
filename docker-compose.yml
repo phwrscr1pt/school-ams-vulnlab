@@ -37,7 +37,7 @@ services:
       ADMINER_DEFAULT_SERVER: db
     # ผูกเฉพาะ localhost และย้ายเป็น 9081 เพื่อไม่ชนโปรเจกต์ 2
     ports:
-      - "127.0.0.1:9081:8080"
+      - "9081:8080"
     depends_on:
       - db
     restart: unless-stopped
